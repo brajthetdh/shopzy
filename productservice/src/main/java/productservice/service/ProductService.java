@@ -1,17 +1,24 @@
 package productservice.service;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import productservice.dto.ProductRequest;
 import productservice.dto.ProductResponse;
+import productservice.entity.Image;
 import productservice.entity.Product;
 import productservice.repository.BrandRepository;
 import productservice.repository.CategoryRepository;
 import productservice.repository.ProductRepository;
-
-import java.util.*;
 
 @Service
 public class ProductService {
@@ -104,11 +111,13 @@ public class ProductService {
         return res;
     }
     
-    public List<ProductResponse> filter(Long brandId, Long categoryId, String sortBy, String sortDir) {
+    public List<ProductResponse> filter(Long brandId, Long categoryId, String sortBy, String sortDir, int page, int size) {
         Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
-        List<Product> list = productRepo.filterProducts(brandId, categoryId, sort);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Product> resultPage = productRepo.filterProducts(brandId, categoryId, pageable);
+
         List<ProductResponse> res = new ArrayList<>();
-        for (Product p : list) res.add(toResponse(p));
+        for (Product p : resultPage.getContent()) res.add(toResponse(p));
         return res;
     }
 

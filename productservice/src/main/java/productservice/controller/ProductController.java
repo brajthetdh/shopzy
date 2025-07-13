@@ -65,8 +65,10 @@ public class ProductController {
             @RequestParam(required = false) Long brandId,
             @RequestParam(required = false) Long categoryId,
             @RequestParam(defaultValue = "id") String sortBy,
-            @RequestParam(defaultValue = "asc") String sortDir) {
-        return service.filter(brandId, categoryId, sortBy, sortDir);
+            @RequestParam(defaultValue = "asc") String sortDir,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return service.filter(brandId, categoryId, sortBy, sortDir, page, size);
     }
 
     
