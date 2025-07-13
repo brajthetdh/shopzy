@@ -5,6 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import authservice.dto.ForgotPasswordRequest;
+import authservice.dto.ResetPasswordRequest;
+import authservice.entity.User;
+import authservice.repository.UserRepository;
+import authservice.service.OtpService;
+
 @RestController
 @RequestMapping("/auth")
 public class ForgotPasswordController {
