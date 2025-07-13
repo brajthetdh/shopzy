@@ -2,6 +2,7 @@ package productservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Sort;
 
 import productservice.dto.ProductRequest;
 import productservice.dto.ProductResponse;
@@ -103,8 +104,9 @@ public class ProductService {
         return res;
     }
     
-    public List<ProductResponse> filter(Long brandId, Long categoryId) {
-        List<Product> list = productRepo.filterProducts(brandId, categoryId);
+    public List<ProductResponse> filter(Long brandId, Long categoryId, String sortBy, String sortDir) {
+        Sort sort = Sort.by(Sort.Direction.fromString(sortDir), sortBy);
+        List<Product> list = productRepo.filterProducts(brandId, categoryId, sort);
         List<ProductResponse> res = new ArrayList<>();
         for (Product p : list) res.add(toResponse(p));
         return res;

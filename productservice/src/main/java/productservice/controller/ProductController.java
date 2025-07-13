@@ -63,8 +63,12 @@ public class ProductController {
     @GetMapping("/filter")
     public List<ProductResponse> filter(
             @RequestParam(required = false) Long brandId,
-            @RequestParam(required = false) Long categoryId) {
-        return service.filter(brandId, categoryId);
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String sortDir) {
+        return service.filter(brandId, categoryId, sortBy, sortDir);
     }
+
+    
 
 }
