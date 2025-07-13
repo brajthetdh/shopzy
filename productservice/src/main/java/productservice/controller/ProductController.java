@@ -49,4 +49,22 @@ public class ProductController {
     public List<ProductResponse> search(@RequestParam("name") String name) {
         return service.search(name);
     }
+    
+    @GetMapping("/category/{categoryId}")
+    public List<ProductResponse> getByCategory(@PathVariable Long categoryId) {
+        return service.getByCategory(categoryId);
+    }
+
+    @GetMapping("/brand/{brandId}")
+    public List<ProductResponse> getByBrand(@PathVariable Long brandId) {
+        return service.getByBrand(brandId);
+    }
+
+    @GetMapping("/filter")
+    public List<ProductResponse> filter(
+            @RequestParam(required = false) Long brandId,
+            @RequestParam(required = false) Long categoryId) {
+        return service.filter(brandId, categoryId);
+    }
+
 }

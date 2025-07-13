@@ -88,6 +88,29 @@ public class ProductService {
         }
         return r;
     }
+    
+    public List<ProductResponse> getByCategory(Long categoryId) {
+        List<Product> list = productRepo.findByCategoryId(categoryId);
+        List<ProductResponse> res = new ArrayList<>();
+        for (Product p : list) res.add(toResponse(p));
+        return res;
+    }
+
+    public List<ProductResponse> getByBrand(Long brandId) {
+        List<Product> list = productRepo.findByBrandId(brandId);
+        List<ProductResponse> res = new ArrayList<>();
+        for (Product p : list) res.add(toResponse(p));
+        return res;
+    }
+    
+    public List<ProductResponse> filter(Long brandId, Long categoryId) {
+        List<Product> list = productRepo.filterProducts(brandId, categoryId);
+        List<ProductResponse> res = new ArrayList<>();
+        for (Product p : list) res.add(toResponse(p));
+        return res;
+    }
+
+
 
 
 }
