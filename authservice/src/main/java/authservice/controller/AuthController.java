@@ -5,6 +5,7 @@ import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import authservice.dto.AuthResponse;
 import authservice.dto.LoginRequest;
 import authservice.dto.SignupRequest;
 import authservice.entity.User;
@@ -24,7 +25,7 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<String> register(@RequestBody SignupRequest req) {
+    public ResponseEntity<?> register(@RequestBody SignupRequest req) {
         if (userRepository.existsByUsername(req.getUsername()))
             return ResponseEntity.badRequest().body("Username already exists");
 
@@ -39,14 +40,19 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginRequest req) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest req) {
         User user = userRepository.findByUsername(req.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
         if (!encoder.matches(req.getPassword(), user.getPassword()))
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
 
-        String token = jwtUtil.generateToken(user.getUsername());
-        return ResponseEntity.ok(token);
+//        String token = jwtUtil.generateToken(user.getUsername());
+//        return ResponseEntity.ok(token);
+        
+        String accessToken = jwtUtil.generateAccessToken(user.getUsername());
+        String refreshToken = jwtUtil.generateRefreshToken(user.getUsername());
+        return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+
     }
 }
